@@ -100,6 +100,34 @@ const SearchComponent: React.FC = () => {
     }
   };
 
+  const validateAndFormat = {
+    date: (value: any) => {
+      if (!value) return 'No data';
+      const str = value.toString();
+      if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}$/.test(str) || !isNaN(Date.parse(str))) {
+        return str;
+      }
+      return 'Invalid date';
+    },
+    
+    number: (value: any) => {
+      if (value === null || value === undefined) return 'No data';
+      if (isNaN(Number(value))) return 'Invalid number';
+      return value;
+    },
+    
+    percentage: (value: any) => {
+      if (!value) return 'No data';
+      if (isNaN(Number(value))) return 'Invalid %';
+      return (value / 1000).toFixed(1) + '%';
+    },
+    
+    text: (value: any) => {
+      if (!value || value.toString().trim() === '') return 'No data';
+      return value;
+    }
+  };
+
   return (
     <div className="search-container">
       <h1>Football Team Search</h1>
@@ -168,15 +196,15 @@ const SearchComponent: React.FC = () => {
               <tbody>
                 {searchResults.map((team) => (
                   <tr key={team.id}>
-                    <td>{team.rank}</td>
-                    <td className="team-name">{team.team}</td>
-                    <td>{team.mascot}</td>
-                    <td>{team.dateOfLastWin || 'N/A'}</td>
-                    <td>{team.winningPercentage ? (team.winningPercentage * 100).toFixed(2) + '%' : 'N/A'}</td>
-                    <td>{team.wins ?? 'N/A'}</td>
-                    <td>{team.losses ?? 'N/A'}</td>
-                    <td>{team.ties ?? 'N/A'}</td>
-                    <td>{team.games ?? 'N/A'}</td>
+                    <td>{validateAndFormat.number(team.rank)}</td>
+                    <td className="team-name">{validateAndFormat.text(team.team)}</td>
+                    <td>{validateAndFormat.text(team.mascot)}</td>
+                    <td>{validateAndFormat.date(team.dateOfLastWin)}</td>
+                    <td>{validateAndFormat.percentage(team.winningPercentage)}</td>
+                    <td>{validateAndFormat.number(team.wins)}</td>
+                    <td>{validateAndFormat.number(team.losses)}</td>
+                    <td>{validateAndFormat.number(team.ties)}</td>
+                    <td>{validateAndFormat.number(team.games)}</td>
                   </tr>
                 ))}
               </tbody>
