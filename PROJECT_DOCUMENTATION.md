@@ -74,7 +74,7 @@ Breakdown:
 
 ### Prerequisites
 - .NET 9.0 SDK
-- Node.js 16+ with npm
+- Node.js 18+ with npm
 
 ### Running the Application
 1. **Start the Backend**:
